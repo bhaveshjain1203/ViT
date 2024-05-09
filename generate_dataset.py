@@ -6,23 +6,20 @@ import os
 # Define image dimensions
 width, height = 256, 256
 num_shapes = 3
-num_images = 500  # Number of images to generate
+num_images = 200  # Number of images to generate
 
 # Create a directory to save the images and masks
-# output_dir = "train_images_with_masks"
+#output_dir = "train_images_with_masks"
 output_dir = "val_images_with_masks"
 output_dir_images = output_dir + "/images"
 output_dir_masks = output_dir + "/masks"
-
 
 os.makedirs(output_dir, exist_ok=True)
 os.makedirs(output_dir_images, exist_ok=True)
 os.makedirs(output_dir_masks, exist_ok=True)
 
-
-
-# Define shapes 
-shapes = ['circle', 'rectangle','triangle']
+# Define shapes
+shapes = ['circle', 'rectangle', 'triangle']
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 
 for image_index in range(num_images):
@@ -32,13 +29,15 @@ for image_index in range(num_images):
     # Create a segmentation mask for the visible triangle
     mask = np.zeros((height, width), dtype=np.uint8)
 
-    # Create three non-overlapping shapes for each image
+    # Shuffle the colors list
+    random.shuffle(colors)
+
+    # select the number of shapes
     for i in range(num_shapes):
         # Select a shape (e.g., circle, rectangle, or triangle)
         shape_type = shapes[i]
 
-        # Randomly select a color
-        # color = random.choice([(255, 0, 0), (0, 255, 0), (0, 0, 255)])
+        # Get color from shuffled list
         color = colors[i]
 
         # Randomly generate position and size for the shape
@@ -48,7 +47,7 @@ for image_index in range(num_images):
 
         # Draw the shape on the image
         if shape_type == 'circle':
-            cv2.circle(img = image, center=(x, y), radius=size, color=color, thickness=-1)
+            cv2.circle(img=image, center=(x, y), radius=size, color=color, thickness=-1)
         elif shape_type == 'rectangle':
             x2, y2 = x + size, y + size
             cv2.rectangle(image, (x, y), (x2, y2), color, -1)
